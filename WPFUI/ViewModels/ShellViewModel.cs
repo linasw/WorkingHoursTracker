@@ -9,5 +9,6 @@ namespace WPFUI.ViewModels
 {
     public class ShellViewModel : Screen
     {
+        private static NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
     }
 }
