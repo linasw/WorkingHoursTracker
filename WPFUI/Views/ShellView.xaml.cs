@@ -23,5 +23,10 @@ namespace WPFUI.Views
         {
             InitializeComponent();
         }
+
+        private void TopGrid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
     }
 }

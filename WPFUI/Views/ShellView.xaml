@@ -4,15 +4,33 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFUI.Views"
-        mc:Ignorable="d"
-        Title="ShellView" Height="450" Width="800"
+        mc:Ignorable="d" Height="600" Width="1024"
+        WindowState="{Binding Path=WindowState, Mode=TwoWay}"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
-        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.ColumnSpan="2" Background="{DynamicResource PrimaryHueMidBrush}" x:Name="TopGrid" MouseDown="TopGrid_MouseDown">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Background="{x:Null}">
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" x:Name="Minimaze">
+                    <materialDesign:PackIcon Kind="WindowMinimize" />
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" x:Name="Quit">
+                    <materialDesign:PackIcon Kind="Power" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
     </Grid>
 </Window>
