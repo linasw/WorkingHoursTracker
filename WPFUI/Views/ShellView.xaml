@@ -21,8 +21,9 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <!-- TOP GRID -->
         <Grid Grid.ColumnSpan="2" Background="{DynamicResource PrimaryHueMidBrush}" x:Name="TopGrid" MouseDown="TopGrid_MouseDown">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Background="{x:Null}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Background="{x:Null}" Margin="0 0 10 0">
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" x:Name="Minimaze">
                     <materialDesign:PackIcon Kind="WindowMinimize" />
                 </Button>
@@ -32,5 +33,21 @@
             </StackPanel>
         </Grid>
 
+        <!-- SIDE BAR -->
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Background="{StaticResource PrimaryHueLightBrush}">
+                <Image Source="../Resources/wrlogo.png" />
+            </Grid>
+            <StackPanel Grid.Row="1" Background="{StaticResource PrimaryHueDarkBrush}">
+                <Button Margin="10">_GODZINY PRACY</Button>
+                <Button Margin="10">_URLOPY</Button>
+                <Button Margin="10">_PRZEGLĄD MIESIĄCA</Button>
+                <Button Margin="10">_BACK UP</Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
