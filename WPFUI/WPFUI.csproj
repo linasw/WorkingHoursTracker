@@ -90,8 +90,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModels\WorkingHoursViewModel.cs" />
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WorkingHoursView.xaml.cs">
+      <DependentUpon>WorkingHoursView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +140,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\ShellView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WorkingHoursView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

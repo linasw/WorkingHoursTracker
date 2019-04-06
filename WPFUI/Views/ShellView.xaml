@@ -43,11 +43,14 @@
                 <Image Source="../Resources/wrlogo.png" />
             </Grid>
             <StackPanel Grid.Row="1" Background="{StaticResource PrimaryHueDarkBrush}">
-                <Button Margin="10">_GODZINY PRACY</Button>
-                <Button Margin="10">_URLOPY</Button>
-                <Button Margin="10">_PRZEGLĄD MIESIĄCA</Button>
-                <Button Margin="10">_BACK UP</Button>
+                <Button x:Name="LoadWorkHours" Margin="10">_GODZINY PRACY</Button>
+                <Button x:Name="LoadVacations" Margin="10">_URLOPY</Button>
+                <Button x:Name="LoadMonthOverview" Margin="10">_PRZEGLĄD MIESIĄCA</Button>
+                <Button x:Name="BackUp" Margin="10">_BACK UP</Button>
             </StackPanel>
         </Grid>
+
+        <!-- CONTENT CONTROL -->
+        <ContentControl Grid.Column="1" Grid.Row="1" x:Name="ActiveItem" />
     </Grid>
 </Window>

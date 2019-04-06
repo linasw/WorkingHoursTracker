@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="WPFUI.Views.WorkingHoursView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFUI.Views"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Medium"
+             TextElement.FontSize="14"
+             FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
+    <Grid Margin="25">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="50" /> <!-- BREAK ON 3RD COLUMN -->
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- ROW 0 -->
+        <materialDesign:PackIcon Grid.Column="0" Kind="Account" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" Margin="10 0 20 0" VerticalAlignment="Center">Pracownik:</TextBlock>
+        <ComboBox Grid.Row="0" Grid.Column="2" VerticalAlignment="Top"
+                  Width="175">
+            <ComboBoxItem
+                IsSelected="True">
+                Apple
+            </ComboBoxItem>
+            <ComboBoxItem>
+                Banana
+            </ComboBoxItem>
+            <ComboBoxItem>
+                Pear
+            </ComboBoxItem>
+            <ComboBoxItem>
+                Orange
+            </ComboBoxItem>
+        </ComboBox>
+
+        <Grid Grid.Column="4" Grid.Row="0">
+            <materialDesign:PackIcon  Kind="Clock" VerticalAlignment="Center" />
+            <TextBlock  Margin="25 0 0 0" VerticalAlignment="Center">Czas:</TextBlock>
+        </Grid>
+
+
+        <!-- ROW 1 -->
+        <materialDesign:PackIcon Grid.Column="0" Grid.Row="1" Margin="0 10 0 0" Kind="DateRange" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin="10 10 20 0" VerticalAlignment="Center">Data:</TextBlock>
+        <DatePicker Grid.Row="1" Grid.Column="2" Margin="0 10 0 0" VerticalAlignment="Center" Width="175" SelectedDate="{x:Static sys:DateTime.Now}"/>
+
+        <materialDesign:TimePicker Grid.Row="1" Grid.Column="4" Width="100" materialDesign:HintAssist.Hint="Od" Is24Hours="True"/>
+        <materialDesign:TimePicker Grid.Row="1" Grid.Column="5" Width="100" materialDesign:HintAssist.Hint="Do" Is24Hours="True" Margin="15 0 0 0"/>
+        <Button Grid.Row="1" Grid.Column="6" Margin="20 0 0 0">_ZAUKTUALIZUJ</Button>
+
+        <!-- ROW 2 -->
+        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="8" Header="Sumy godzin" Margin="0 50 0 0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 0 10">Wybranej daty:</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="20 0 0 10">8</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 0 10">Podstawowych w danym miesiącu:</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="20 0 0 10">50</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 0 10">Nadgodzin w danym miesiącu:</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="20 0 0 10">5</TextBlock>
+            </Grid>
+        </GroupBox>
+        
+        <!-- ROW 3 -->
+        <DockPanel Grid.Row="3" Grid.ColumnSpan="8" Margin="0 25 0 0">
+            <Grid>
+                <Rectangle Height="100" Fill="{StaticResource PrimaryHueLightBrush}" RadiusX="10" RadiusY="10" DockPanel.Dock="Bottom"/>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Source={x:Static sys:DateTime.Now}}" Style="{StaticResource MaterialDesignDisplay2TextBlock}"/>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</UserControl>

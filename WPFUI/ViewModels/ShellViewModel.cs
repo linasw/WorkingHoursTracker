@@ -3,9 +3,14 @@ using System.Windows;
 
 namespace WPFUI.ViewModels
 {
-    public class ShellViewModel : Screen
+    public class ShellViewModel : Conductor<object>
     {
         private static NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+
+        public ShellViewModel()
+        {
+            ActivateItem(new WorkingHoursViewModel());
+        }
 
         public void Quit()
         {
@@ -15,6 +20,26 @@ namespace WPFUI.ViewModels
         public void Minimaze()
         {
             WindowState = WindowState.Minimized;
+        }
+
+        public void LoadWorkHours()
+        {
+            ActivateItem(new WorkingHoursViewModel());
+        }
+
+        public void LoadVacations()
+        {
+
+        }
+
+        public void LoadMonthOverview()
+        {
+
+        }
+
+        public void BackUp()
+        {
+
         }
 
         private WindowState _windowState;
