@@ -51,8 +51,8 @@
         </ComboBox>
 
         <Grid Grid.Column="4" Grid.Row="0">
-            <materialDesign:PackIcon  Kind="Clock" VerticalAlignment="Center" />
-            <TextBlock  Margin="25 0 0 0" VerticalAlignment="Center">Czas:</TextBlock>
+            <materialDesign:PackIcon  Kind="Clock" VerticalAlignment="Center" Margin="0 10 0 0"/>
+            <TextBlock  Margin="25 10 0 0" VerticalAlignment="Center">Czas:</TextBlock>
         </Grid>
 
 
@@ -61,8 +61,8 @@
         <TextBlock Grid.Row="1" Grid.Column="1" Margin="10 10 20 0" VerticalAlignment="Center">Data:</TextBlock>
         <DatePicker Grid.Row="1" Grid.Column="2" Margin="0 10 0 0" VerticalAlignment="Center" Width="175" SelectedDate="{x:Static sys:DateTime.Now}"/>
 
-        <materialDesign:TimePicker Grid.Row="1" Grid.Column="4" Width="100" materialDesign:HintAssist.Hint="Od" Is24Hours="True"/>
-        <materialDesign:TimePicker Grid.Row="1" Grid.Column="5" Width="100" materialDesign:HintAssist.Hint="Do" Is24Hours="True" Margin="15 0 0 0"/>
+        <materialDesign:TimePicker Grid.Row="1" Grid.Column="4" Width="100" materialDesign:HintAssist.Hint="Od" Is24Hours="True" Margin="0 10 0 0"/>
+        <materialDesign:TimePicker Grid.Row="1" Grid.Column="5" Width="100" materialDesign:HintAssist.Hint="Do" Is24Hours="True" Margin="15 10 0 0"/>
         <Button Grid.Row="1" Grid.Column="6" Margin="20 0 0 0">_ZAUKTUALIZUJ</Button>
 
         <!-- ROW 2 -->
@@ -90,7 +90,7 @@
         <DockPanel Grid.Row="3" Grid.ColumnSpan="8" Margin="0 25 0 0">
             <Grid>
                 <Rectangle Height="100" Fill="{StaticResource PrimaryHueLightBrush}" RadiusX="10" RadiusY="10" DockPanel.Dock="Bottom"/>
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Source={x:Static sys:DateTime.Now}}" Style="{StaticResource MaterialDesignDisplay2TextBlock}"/>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="Time" Style="{StaticResource MaterialDesignDisplay2TextBlock}"/>
             </Grid>
         </DockPanel>
     </Grid>
