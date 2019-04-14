@@ -34,20 +34,16 @@
         <materialDesign:PackIcon Grid.Column="0" Kind="Account" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="0" Grid.Column="1" Margin="10 0 20 0" VerticalAlignment="Center">Pracownik:</TextBlock>
         <ComboBox Grid.Row="0" Grid.Column="2" VerticalAlignment="Top"
-                  Width="175">
-            <ComboBoxItem
-                IsSelected="True">
-                Apple
-            </ComboBoxItem>
-            <ComboBoxItem>
-                Banana
-            </ComboBoxItem>
-            <ComboBoxItem>
-                Pear
-            </ComboBoxItem>
-            <ComboBoxItem>
-                Orange
-            </ComboBoxItem>
+                  Width="175" 
+                  x:Name="Employees"
+                  SelectedItem="{Binding Path=SelectedEmployee, Mode=TwoWay}" SelectedIndex="0">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding FirstName}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
         </ComboBox>
 
         <Grid Grid.Column="4" Grid.Row="0">
@@ -59,11 +55,13 @@
         <!-- ROW 1 -->
         <materialDesign:PackIcon Grid.Column="0" Grid.Row="1" Margin="0 10 0 0" Kind="DateRange" VerticalAlignment="Center" />
         <TextBlock Grid.Row="1" Grid.Column="1" Margin="10 10 20 0" VerticalAlignment="Center">Data:</TextBlock>
-        <DatePicker Grid.Row="1" Grid.Column="2" Margin="0 10 0 0" VerticalAlignment="Center" Width="175" SelectedDate="{x:Static sys:DateTime.Now}"/>
+        <DatePicker Grid.Row="1" Grid.Column="2" Margin="0 10 0 0" VerticalAlignment="Center" Width="175" x:Name="SelectedDate"/>
 
-        <materialDesign:TimePicker Grid.Row="1" Grid.Column="4" Width="100" materialDesign:HintAssist.Hint="Od" Is24Hours="True" Margin="0 10 0 0"/>
-        <materialDesign:TimePicker Grid.Row="1" Grid.Column="5" Width="100" materialDesign:HintAssist.Hint="Do" Is24Hours="True" Margin="15 10 0 0"/>
-        <Button Grid.Row="1" Grid.Column="6" Margin="20 0 0 0">_ZAUKTUALIZUJ</Button>
+        <materialDesign:TimePicker Grid.Row="1" Grid.Column="4" Width="100" materialDesign:HintAssist.Hint="Od" Is24Hours="True" Margin="0 10 0 0" 
+                                   SelectedTime="{Binding Path=SelectedTimeFrom, Mode=TwoWay}"  />
+        <materialDesign:TimePicker Grid.Row="1" Grid.Column="5" Width="100" materialDesign:HintAssist.Hint="Do" Is24Hours="True" Margin="15 10 0 0"
+                                   SelectedTime="{Binding Path=SelectedTimeTo, Mode=TwoWay}" />
+        <Button Grid.Row="1" Grid.Column="6" Margin="20 0 0 0">_ZAKTUALIZUJ</Button>
 
         <!-- ROW 2 -->
         <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="8" Header="Sumy godzin" Margin="0 50 0 0">
@@ -78,11 +76,11 @@
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 0 10">Wybranej daty:</TextBlock>
-                <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="20 0 0 10">8</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="20 0 0 10" x:Name="SelectedDateHoursSum" />
                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 0 10">Podstawowych w danym miesiącu:</TextBlock>
-                <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="20 0 0 10">50</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="20 0 0 10" x:Name="NormalHoursSum" />
                 <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 0 10">Nadgodzin w danym miesiącu:</TextBlock>
-                <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="20 0 0 10">5</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="20 0 0 10" x:Name="OvertimeHoursSum" />
             </Grid>
         </GroupBox>
         

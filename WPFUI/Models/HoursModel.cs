@@ -19,10 +19,12 @@ namespace WPFUI.Models
         public TimeSpan From { get; set; }
         public TimeSpan To { get; set; }
         [DefaultValue(0)]
-        public int Normal { get; set; }
+        public decimal Normal { get; set; }
         [DefaultValue(0)]
-        public int Overtime { get; set; }
+        public decimal Overtime { get; set; }
         [ForeignKey("Employee")]
         public int EmployeeId { get; set; }
+        
+        public virtual EmployeeModel Employee { get; set; }
     }
 }

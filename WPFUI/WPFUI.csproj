@@ -69,6 +69,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -96,7 +97,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Employee.cs" />
+    <Compile Include="WHTDbContext.cs" />
+    <Compile Include="Models\EmployeeModel.cs" />
+    <Compile Include="Models\Enums\VacationTypes.cs" />
+    <Compile Include="Models\HoursModel.cs" />
+    <Compile Include="Models\VacationModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\VacationsViewModel.cs" />
     <Compile Include="ViewModels\WorkingHoursViewModel.cs" />
@@ -145,7 +150,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
