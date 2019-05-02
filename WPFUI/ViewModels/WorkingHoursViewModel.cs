@@ -15,15 +15,12 @@ namespace WPFUI.ViewModels
 
         private WHTDbContext _dbContext;
         private BindableCollection<EmployeeModel> _employees;
-        private decimal _normalHoursSum;
-        private decimal _overtimeHoursSum;
+        private BindableCollection<HoursModel> _hours;
         private DateTime _selectedDate;
-        private string _selectedDateHoursSum;
         private EmployeeModel _selectedEmployee;
-        private System.Nullable<DateTime> _selectedTimeFrom;
-        private System.Nullable<DateTime> _selectedTimeTo;
-        private String _time;
+        private DateTime? _timeFrom;
         private DispatcherTimer _timer;
+        private DateTime? _timeTo;
 
         public WorkingHoursViewModel()
         {
@@ -31,9 +28,11 @@ namespace WPFUI.ViewModels
             _timer.Tick += new EventHandler(timer_tick);
             _timer.Interval = new TimeSpan(0, 0, 1);
             _timer.Start();
+            _selectedDate = DateTime.Now;
             Employees = new BindableCollection<EmployeeModel>();
             _selectedEmployee = Employees.First();
-            _selectedDate = DateTime.Now;
+            Hours = new BindableCollection<HoursModel>();
+            Hours.Refresh();
         }
 
         public BindableCollection<EmployeeModel> Employees
@@ -53,78 +52,48 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => Employees);
             }
         }
-        public decimal NormalHoursSum
+        public BindableCollection<HoursModel> Hours
         {
             get
             {
-                _normalHoursSum = 0;
                 using (_dbContext = new WHTDbContext())
                 {
-                    var daysOfSelectedMonth = _dbContext.Hours
-                        .Where(x => x.WorkingDate.Month.Equals(SelectedDate.Month) && x.EmployeeId.Equals(SelectedEmployee.Id));
+                    var tempHours = _dbContext.Hours;
+                    _hours = new BindableCollection<HoursModel>(tempHours);
 
-                    if (daysOfSelectedMonth.Any())
+                    var tempTime = _hours.Where(x => x.WorkingDate.ToShortDateString().Equals(SelectedDate.ToShortDateString()) && x.EmployeeId.Equals(SelectedEmployee.Id));
+                    if (tempTime.Any())
                     {
-                        var listOfDays = daysOfSelectedMonth.ToList();
-                        foreach (var item in listOfDays)
-                        {
-                            _normalHoursSum += item.Normal;
-                        }
+                        _timeFrom = new DateTime(tempTime.Select(x => x.From).ToList().First().Ticks);
+                        _timeTo = new DateTime(tempTime.Select(x => x.To).ToList().First().Ticks);
                     }
+                    else
+                    {
+                        _timeFrom = null;
+                        _timeTo = null;
+                    }
+                    NotifyOfPropertyChange(() => TimeFrom);
+                    NotifyOfPropertyChange(() => TimeTo);
                 }
-                return _normalHoursSum;
+                return _hours;
             }
-        }
-        public decimal OvertimeHoursSum
-        {
-            get
+            set
             {
-                _overtimeHoursSum = 0;
-                using (_dbContext = new WHTDbContext())
-                {
-                    var daysOfSelectedMonth = _dbContext.Hours
-                        .Where(x => x.WorkingDate.Month.Equals(SelectedDate.Month) && x.EmployeeId.Equals(SelectedEmployee.Id));
-
-                    if (daysOfSelectedMonth.Any())
-                    {
-                        var listOfDays = daysOfSelectedMonth.ToList();
-                        foreach (var item in listOfDays)
-                        {
-                            _overtimeHoursSum += item.Overtime;
-                        }
-                    }
-                }
-                return _overtimeHoursSum;
+                _hours = value;
+                NotifyOfPropertyChange(() => Hours);
             }
         }
         public DateTime SelectedDate
         {
-            get { return _selectedDate; }
+            get
+            {
+                return _selectedDate;
+            }
             set
             {
                 _selectedDate = value;
                 NotifyOfPropertyChange(() => SelectedDate);
-                NotifyOfPropertyChange(() => SelectedTimeFrom);
-                NotifyOfPropertyChange(() => SelectedTimeTo);
-                NotifyOfPropertyChange(() => NormalHoursSum);
-                NotifyOfPropertyChange(() => OvertimeHoursSum);
-                NotifyOfPropertyChange(() => SelectedDateHoursSum);
-            }
-        }
-        public string SelectedDateHoursSum
-        {
-            get
-            {
-                if (SelectedTimeFrom != null && SelectedTimeTo != null)
-                {
-                    TimeSpan interval = (TimeSpan)(SelectedTimeTo - SelectedTimeFrom);
-                    _selectedDateHoursSum = interval.TotalHours.ToString("N2");
-                    return _selectedDateHoursSum;
-                }
-                else
-                {
-                    return "0";
-                }
+                Hours.Refresh();
             }
         }
         public EmployeeModel SelectedEmployee
@@ -137,65 +106,7 @@ namespace WPFUI.ViewModels
             {
                 _selectedEmployee = value;
                 NotifyOfPropertyChange(() => SelectedEmployee);
-                NotifyOfPropertyChange(() => SelectedTimeFrom);
-                NotifyOfPropertyChange(() => SelectedTimeTo);
-                NotifyOfPropertyChange(() => NormalHoursSum);
-                NotifyOfPropertyChange(() => OvertimeHoursSum);
-                NotifyOfPropertyChange(() => SelectedDateHoursSum);
-            }
-        }
-        public System.Nullable<DateTime> SelectedTimeFrom
-        {
-            get
-            {
-                using (_dbContext = new WHTDbContext())
-                {
-                    var temp = _dbContext.Hours
-                        .Where(x => x.WorkingDate.Equals(SelectedDate) && x.EmployeeId.Equals(SelectedEmployee.Id));
-
-                    if (temp.Any())
-                    {
-                        _selectedTimeFrom = new DateTime(temp.Select(x => x.From).ToList().First().Ticks);
-                    }
-                    else
-                    {
-                        //_selectedTimeFrom = new DateTime(new TimeSpan(0, 0, 0).Ticks);
-                        _selectedTimeFrom = null;
-                    }
-                }
-                return _selectedTimeFrom;
-            }
-            set
-            {
-                _selectedTimeFrom = value;
-                NotifyOfPropertyChange(() => SelectedTimeFrom);
-            }
-        }
-        public System.Nullable<DateTime> SelectedTimeTo
-        {
-            get
-            {
-                using (_dbContext = new WHTDbContext())
-                {
-                    var temp = _dbContext.Hours
-                        .Where(x => x.WorkingDate.Equals(SelectedDate) && x.EmployeeId.Equals(SelectedEmployee.Id));
-
-                    if (temp.Any())
-                    {
-                        _selectedTimeTo = new DateTime(temp.Select(x => x.To).ToList().First().Ticks);
-                    }
-                    else
-                    {
-                        _selectedTimeTo = null;
-                    }
-                }
-                return _selectedTimeTo;
-            }
-            set
-            {
-
-                _selectedTimeTo = value;
-                NotifyOfPropertyChange(() => SelectedTimeTo);
+                Hours.Refresh();
             }
         }
         public String Time
@@ -204,13 +115,43 @@ namespace WPFUI.ViewModels
             {
                 return DateTime.Now.ToLongDateString() + ", " + DateTime.Now.ToLongTimeString();
             }
+        }
+        public DateTime? TimeFrom
+        {
+            get
+            {
+                return _timeFrom;
+            }
             set
             {
-                _time = value;
-                NotifyOfPropertyChange(() => Time);
+                _timeFrom = value;
+                NotifyOfPropertyChange(() => TimeFrom);
             }
         }
-
+        public DateTime? TimeTo
+        {
+            get
+            {
+                return _timeTo;
+            }
+            set
+            {
+                _timeTo = value;
+                NotifyOfPropertyChange(() => TimeTo);
+            }
+        }
+        public bool CanTimeUpdate(DateTime? selectedTimeFrom, DateTime? selectedTimeTo, DateTime selectedDate, EmployeeModel selectedEmployee)
+        {
+            if (selectedTimeFrom == null || selectedTimeTo == null || selectedDate == null || selectedEmployee == null)
+            {
+                return false;
+            }
+            return true;
+        }
+        public void TimeUpdate(DateTime? selectedTimeFrom, DateTime? selectedTimeTo, DateTime selectedDate, EmployeeModel selectedEmployee)
+        {
+            
+        }
         private void timer_tick(object sender, EventArgs e)
         {
             NotifyOfPropertyChange(() => Time);

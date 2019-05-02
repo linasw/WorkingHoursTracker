@@ -57,11 +57,15 @@
         <TextBlock Grid.Row="1" Grid.Column="1" Margin="10 10 20 0" VerticalAlignment="Center">Data:</TextBlock>
         <DatePicker Grid.Row="1" Grid.Column="2" Margin="0 10 0 0" VerticalAlignment="Center" Width="175" x:Name="SelectedDate"/>
 
-        <materialDesign:TimePicker Grid.Row="1" Grid.Column="4" Width="100" materialDesign:HintAssist.Hint="Od" Is24Hours="True" Margin="0 10 0 0" 
-                                   SelectedTime="{Binding Path=SelectedTimeFrom, Mode=TwoWay}"  />
-        <materialDesign:TimePicker Grid.Row="1" Grid.Column="5" Width="100" materialDesign:HintAssist.Hint="Do" Is24Hours="True" Margin="15 10 0 0"
-                                   SelectedTime="{Binding Path=SelectedTimeTo, Mode=TwoWay}" />
-        <Button Grid.Row="1" Grid.Column="6" Margin="20 0 0 0">_ZAKTUALIZUJ</Button>
+        <TextBox Grid.Row="1" Grid.Column="4" Width="100" 
+                 materialDesign:HintAssist.Hint="Od" 
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 Text="{Binding TimeFrom, StringFormat=HH:mm}"/>
+        <TextBox Grid.Row="1" Grid.Column="5" Width="100" Margin="10 0 0 0"
+                 materialDesign:HintAssist.Hint="Do" 
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 Text="{Binding TimeTo, StringFormat=HH:mm}"/>
+        <Button Grid.Row="1" Grid.Column="6" Margin="20 0 0 0" x:Name="TimeUpdate">_ZAKTUALIZUJ</Button>
 
         <!-- ROW 2 -->
         <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="8" Header="Sumy godzin" Margin="0 50 0 0">
