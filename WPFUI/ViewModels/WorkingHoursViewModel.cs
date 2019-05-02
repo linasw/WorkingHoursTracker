@@ -16,7 +16,10 @@ namespace WPFUI.ViewModels
         private WHTDbContext _dbContext;
         private BindableCollection<EmployeeModel> _employees;
         private BindableCollection<HoursModel> _hours;
+        private string _normalHoursSum;
+        private string _overtimeHoursSum;
         private DateTime _selectedDate;
+        private string _selectedDateHoursSum;
         private EmployeeModel _selectedEmployee;
         private DateTime? _timeFrom;
         private DispatcherTimer _timer;
@@ -83,6 +86,62 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => Hours);
             }
         }
+        public string NormalHoursSum
+        {
+            get
+            {
+                var daysOfSelectedMonth = Hours.Where(x => x.WorkingDate.Month.Equals(SelectedDate.Month) && x.EmployeeId.Equals(SelectedEmployee.Id));
+
+                if (daysOfSelectedMonth.Any())
+                {
+                    var listOfDays = daysOfSelectedMonth.ToList();
+                    decimal hoursSum = 0;
+                    foreach (var day in listOfDays)
+                    {
+                        hoursSum += day.Normal;
+                    }
+
+                    return _normalHoursSum = hoursSum.ToString("N2");
+                }
+                else
+                {
+                    return "0";
+                }
+            }
+            set
+            {
+                _normalHoursSum = value;
+                NotifyOfPropertyChange(() => NormalHoursSum);
+            }
+        }
+        public string OvertimeHoursSum
+        {
+            get
+            {
+                var daysOfSelectedMonth = Hours.Where(x => x.WorkingDate.Month.Equals(SelectedDate.Month) && x.EmployeeId.Equals(SelectedEmployee.Id));
+
+                if (daysOfSelectedMonth.Any())
+                {
+                    var listOfDays = daysOfSelectedMonth.ToList();
+                    decimal hoursSum = 0;
+                    foreach (var day in listOfDays)
+                    {
+                        hoursSum += day.Overtime;
+                    }
+
+                    return _overtimeHoursSum = hoursSum.ToString("N2");
+                }
+                else
+                {
+                    return "0";
+                }
+            }
+            set
+            {
+                _overtimeHoursSum = value;
+                NotifyOfPropertyChange(() => OvertimeHoursSum);
+            }
+        }
         public DateTime SelectedDate
         {
             get
@@ -92,8 +151,27 @@ namespace WPFUI.ViewModels
             set
             {
                 _selectedDate = value;
-                NotifyOfPropertyChange(() => SelectedDate);
                 Hours.Refresh();
+                NotifyOfPropertyChange(() => SelectedDate);
+                NotifyOfPropertyChange(() => SelectedDateHoursSum);
+                NotifyOfPropertyChange(() => NormalHoursSum);
+                NotifyOfPropertyChange(() => OvertimeHoursSum);
+            }
+        }
+        public string SelectedDateHoursSum
+        {
+            get
+            {
+                if (TimeFrom != null && TimeTo != null)
+                {
+                    TimeSpan interval = (TimeSpan)(TimeTo - TimeFrom);
+                    _selectedDateHoursSum = interval.TotalHours.ToString("N2");
+                    return _selectedDateHoursSum;
+                }
+                else
+                {
+                    return "0";
+                }
             }
         }
         public EmployeeModel SelectedEmployee
@@ -107,6 +185,9 @@ namespace WPFUI.ViewModels
                 _selectedEmployee = value;
                 NotifyOfPropertyChange(() => SelectedEmployee);
                 Hours.Refresh();
+                NotifyOfPropertyChange(() => SelectedDateHoursSum);
+                NotifyOfPropertyChange(() => NormalHoursSum);
+                NotifyOfPropertyChange(() => OvertimeHoursSum);
             }
         }
         public String Time
