@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace WPFUI.ViewModels
         private WHTDbContext _dbContext;
         private BindableCollection<EmployeeModel> _employees;
         private BindableCollection<HoursModel> _hours;
+        private SnackbarMessageQueue _messageQueue;
         private string _normalHoursSum;
         private string _overtimeHoursSum;
         private DateTime _selectedDate;
@@ -36,6 +38,16 @@ namespace WPFUI.ViewModels
             _selectedEmployee = Employees.First();
             Hours = new BindableCollection<HoursModel>();
             Hours.Refresh();
+            MessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(5000));
+        }
+
+        public bool CanTimeUpdate
+        {
+            get
+            {
+                var toReturn = (TimeFrom != null && TimeTo != null && SelectedDate != null && SelectedEmployee != null && TimeFrom.Value.Ticks < TimeTo.Value.Ticks);
+                return toReturn;
+            }
         }
 
         public BindableCollection<EmployeeModel> Employees
@@ -55,6 +67,7 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => Employees);
             }
         }
+
         public BindableCollection<HoursModel> Hours
         {
             get
@@ -63,20 +76,18 @@ namespace WPFUI.ViewModels
                 {
                     var tempHours = _dbContext.Hours;
                     _hours = new BindableCollection<HoursModel>(tempHours);
+                    var tempTime = _hours.Where(x => x.WorkingDate.Date.Equals(SelectedDate.Date) && x.EmployeeId.Equals(SelectedEmployee.Id));
 
-                    var tempTime = _hours.Where(x => x.WorkingDate.ToShortDateString().Equals(SelectedDate.ToShortDateString()) && x.EmployeeId.Equals(SelectedEmployee.Id));
                     if (tempTime.Any())
                     {
-                        _timeFrom = new DateTime(tempTime.Select(x => x.From).ToList().First().Ticks);
-                        _timeTo = new DateTime(tempTime.Select(x => x.To).ToList().First().Ticks);
+                        TimeFrom = new DateTime(tempTime.Select(x => x.From).ToList().First().Ticks);
+                        TimeTo = new DateTime(tempTime.Select(x => x.To).ToList().First().Ticks);
                     }
                     else
                     {
-                        _timeFrom = null;
-                        _timeTo = null;
+                        TimeFrom = null;
+                        TimeTo = null;
                     }
-                    NotifyOfPropertyChange(() => TimeFrom);
-                    NotifyOfPropertyChange(() => TimeTo);
                 }
                 return _hours;
             }
@@ -84,6 +95,19 @@ namespace WPFUI.ViewModels
             {
                 _hours = value;
                 NotifyOfPropertyChange(() => Hours);
+            }
+        }
+
+        public SnackbarMessageQueue MessageQueue
+        {
+            get
+            {
+                return _messageQueue;
+            }
+            set
+            {
+                _messageQueue = value;
+                NotifyOfPropertyChange(() => MessageQueue);
             }
         }
         public string NormalHoursSum
@@ -156,6 +180,7 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => SelectedDateHoursSum);
                 NotifyOfPropertyChange(() => NormalHoursSum);
                 NotifyOfPropertyChange(() => OvertimeHoursSum);
+                NotifyOfPropertyChange(() => CanTimeUpdate);
             }
         }
         public string SelectedDateHoursSum
@@ -188,6 +213,7 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => SelectedDateHoursSum);
                 NotifyOfPropertyChange(() => NormalHoursSum);
                 NotifyOfPropertyChange(() => OvertimeHoursSum);
+                NotifyOfPropertyChange(() => CanTimeUpdate);
             }
         }
         public String Time
@@ -207,6 +233,7 @@ namespace WPFUI.ViewModels
             {
                 _timeFrom = value;
                 NotifyOfPropertyChange(() => TimeFrom);
+                NotifyOfPropertyChange(() => CanTimeUpdate);
             }
         }
         public DateTime? TimeTo
@@ -219,19 +246,52 @@ namespace WPFUI.ViewModels
             {
                 _timeTo = value;
                 NotifyOfPropertyChange(() => TimeTo);
+                NotifyOfPropertyChange(() => CanTimeUpdate);
             }
         }
-        public bool CanTimeUpdate(DateTime? selectedTimeFrom, DateTime? selectedTimeTo, DateTime selectedDate, EmployeeModel selectedEmployee)
+        public void TimeUpdate()
         {
-            if (selectedTimeFrom == null || selectedTimeTo == null || selectedDate == null || selectedEmployee == null)
+            using (_dbContext = new WHTDbContext())
             {
-                return false;
+                if (_dbContext.Hours.Any(x =>
+                    x.WorkingDate.Year.Equals(SelectedDate.Year) &&
+                    x.WorkingDate.Month.Equals(SelectedDate.Month) &&
+                    x.WorkingDate.Day.Equals(SelectedDate.Day) &&
+                    x.EmployeeId.Equals(SelectedEmployee.Id)))
+                {
+                    var toUpdate = _dbContext.Hours.Single(x =>
+                    x.WorkingDate.Year.Equals(SelectedDate.Year) &&
+                    x.WorkingDate.Month.Equals(SelectedDate.Month) &&
+                    x.WorkingDate.Day.Equals(SelectedDate.Day) &&
+                    x.EmployeeId.Equals(SelectedEmployee.Id));
+
+                    toUpdate.From = TimeFrom.Value.TimeOfDay;
+                    toUpdate.To = TimeTo.Value.TimeOfDay;
+                    _dbContext.SaveChanges();
+                    MessageQueue.Enqueue("ZAKTUALIZOWANO");
+                }
+                else
+                {
+                    HoursModel tempHours = new HoursModel();
+                    tempHours.WorkingDate = SelectedDate;
+                    tempHours.From = TimeFrom.Value.TimeOfDay;
+                    tempHours.To = TimeTo.Value.TimeOfDay;
+                    tempHours.EmployeeId = SelectedEmployee.Id;
+                    var totalHours = (TimeTo - TimeFrom).Value.TotalHours;
+                    if (totalHours <= 8)
+                    {
+                        tempHours.Normal = (decimal)totalHours;
+                    }
+                    else
+                    {
+                        tempHours.Normal = 8;
+                        tempHours.Overtime = (decimal)(totalHours - 8);
+                    }
+                    _dbContext.Hours.Add(tempHours);
+                    _dbContext.SaveChanges();
+                    MessageQueue.Enqueue("DODANO");
+                }
             }
-            return true;
-        }
-        public void TimeUpdate(DateTime? selectedTimeFrom, DateTime? selectedTimeTo, DateTime selectedDate, EmployeeModel selectedEmployee)
-        {
-            
         }
         private void timer_tick(object sender, EventArgs e)
         {
