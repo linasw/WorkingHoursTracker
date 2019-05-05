@@ -119,13 +119,13 @@ namespace WPFUI.ViewModels
                 if (daysOfSelectedMonth.Any())
                 {
                     var listOfDays = daysOfSelectedMonth.ToList();
-                    decimal hoursSum = 0;
+                    TimeSpan hoursSum = new TimeSpan(0, 0, 0);
                     foreach (var day in listOfDays)
                     {
-                        hoursSum += day.Normal;
+                        hoursSum = hoursSum.Add(day.Normal.Value);
                     }
 
-                    return _normalHoursSum = hoursSum.ToString("N2");
+                    return _normalHoursSum = new DateTime(hoursSum.Ticks).ToString("HH:mm");
                 }
                 else
                 {
@@ -147,13 +147,13 @@ namespace WPFUI.ViewModels
                 if (daysOfSelectedMonth.Any())
                 {
                     var listOfDays = daysOfSelectedMonth.ToList();
-                    decimal hoursSum = 0;
+                    TimeSpan hoursSum = new TimeSpan(0, 0,0);
                     foreach (var day in listOfDays)
                     {
-                        hoursSum += day.Overtime;
+                        hoursSum = hoursSum.Add(day.Overtime.Value);
                     }
 
-                    return _overtimeHoursSum = hoursSum.ToString("N2");
+                    return _overtimeHoursSum = new DateTime(hoursSum.Ticks).ToString("HH:mm");
                 }
                 else
                 {
@@ -190,7 +190,7 @@ namespace WPFUI.ViewModels
                 if (TimeFrom != null && TimeTo != null)
                 {
                     TimeSpan interval = (TimeSpan)(TimeTo - TimeFrom);
-                    _selectedDateHoursSum = interval.TotalHours.ToString("N2");
+                    _selectedDateHoursSum = new DateTime(interval.Ticks).ToString("HH:mm");
                     return _selectedDateHoursSum;
                 }
                 else
@@ -278,20 +278,15 @@ namespace WPFUI.ViewModels
                     tempHours.To = TimeTo.Value.TimeOfDay;
                     tempHours.EmployeeId = SelectedEmployee.Id;
                     var totalHours = (TimeTo - TimeFrom).Value.TotalHours;
-                    if (totalHours <= 8)
-                    {
-                        tempHours.Normal = (decimal)totalHours;
-                    }
-                    else
-                    {
-                        tempHours.Normal = 8;
-                        tempHours.Overtime = (decimal)(totalHours - 8);
-                    }
                     _dbContext.Hours.Add(tempHours);
                     _dbContext.SaveChanges();
                     MessageQueue.Enqueue("DODANO");
                 }
             }
+
+            NotifyOfPropertyChange(() => SelectedDateHoursSum);
+            NotifyOfPropertyChange(() => NormalHoursSum);
+            NotifyOfPropertyChange(() => OvertimeHoursSum);
         }
         private void timer_tick(object sender, EventArgs e)
         {

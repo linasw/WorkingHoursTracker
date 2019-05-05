@@ -19,9 +19,52 @@ namespace WPFUI.Models
         public TimeSpan From { get; set; }
         public TimeSpan To { get; set; }
         [DefaultValue(0)]
-        public decimal Normal { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public TimeSpan? Normal
+        {
+            get
+            {
+                if (From == null || To == null)
+                {
+                    return new TimeSpan(0, 0, 0);
+                }
+
+                var totalHours = (To - From);
+                if (totalHours >= new TimeSpan(8, 0, 0))
+                {
+                    return new TimeSpan(8, 0, 0);
+                }
+                else
+                {
+                    return totalHours;
+                }
+            }
+            private set { }
+        }
         [DefaultValue(0)]
-        public decimal Overtime { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public TimeSpan? Overtime
+        {
+            get
+            {
+                if (From == null || To == null)
+                {
+                    return new TimeSpan(0, 0, 0);
+                }
+
+                var totalHours = (To - From);
+                if (totalHours <= new TimeSpan(8, 0, 0))
+                {
+                    return new TimeSpan(0, 0, 0);
+                }
+                else
+                {
+                    var overtimeHours = totalHours - new TimeSpan(8, 0, 0);
+                    return new TimeSpan(overtimeHours.Ticks);
+                }
+            }
+            private set { }
+        }
         [ForeignKey("Employee")]
         public int EmployeeId { get; set; }
         

@@ -40,8 +40,6 @@ namespace WPFUI
                 WorkingDate = now,
                 From = new TimeSpan(8, 30, 0),
                 To = new TimeSpan(17, 0, 0),
-                Normal = 8M,
-                Overtime = 0.5M,
                 EmployeeId = 1
             };
             Hours.Add(tempHours);
@@ -51,8 +49,6 @@ namespace WPFUI
                 WorkingDate = now.AddDays(-1),
                 From = new TimeSpan(7, 00, 0),
                 To = new TimeSpan(17, 0, 0),
-                Normal = 8M,
-                Overtime = 2M,
                 EmployeeId = 1
             };
             Hours.Add(tempHours);
@@ -62,8 +58,6 @@ namespace WPFUI
                 WorkingDate = now,
                 From = new TimeSpan(6, 30, 0),
                 To = new TimeSpan(10, 0, 0),
-                Normal = 3.5M,
-                Overtime = 0M,
                 EmployeeId = 2
             };
             Hours.Add(tempHours);
