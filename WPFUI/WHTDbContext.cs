@@ -1,6 +1,7 @@
 namespace WPFUI
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
     using WPFUI.Models;
@@ -15,6 +16,7 @@ namespace WPFUI
         public DbSet<EmployeeModel> Employees { get; set; }
         public DbSet<HoursModel> Hours { get; set; }
         public DbSet<VacationModel> Vacations { get; set; }
+        public DbSet<YearMonthModel> YearMonths { get; set; }
 
         public void InitDummyData()
         {
@@ -61,6 +63,38 @@ namespace WPFUI
                 EmployeeId = 2
             };
             Hours.Add(tempHours);
+
+            tempHours = new HoursModel
+            {
+                WorkingDate = now.AddDays(-14),
+                From = new TimeSpan(6, 30, 0),
+                To = new TimeSpan(10, 0, 0),
+                EmployeeId = 1
+            };
+            Hours.Add(tempHours);
+
+            HashSet<int> weekends = new HashSet<int>();
+            weekends.Add(4);
+            weekends.Add(5);
+            weekends.Add(1);
+            weekends.Add(3);
+            weekends.Add(11);
+            weekends.Add(12);
+            weekends.Add(18);
+            weekends.Add(19);
+            weekends.Add(25);
+            weekends.Add(26);
+            YearMonthModel yearMonth = new YearMonthModel { Year=2019, Month=5, MonthsWorkingHours=168, MonthsWeekendDays= new HashSet<int>(weekends)};
+            YearMonths.Add(yearMonth);
+
+            yearMonth = new YearMonthModel
+            {
+                Year = 2019,
+                Month = 6,
+                MonthsWorkingHours = 160,
+                MonthsWeekendDays = new HashSet<int>(weekends)
+            };
+            YearMonths.Add(yearMonth);
 
             this.SaveChanges();
         }

@@ -38,8 +38,30 @@ namespace WPFUI.ViewModels
             _selectedEmployee = Employees.First();
             Hours = new BindableCollection<HoursModel>();
             Hours.Refresh();
+            YearMonths.Refresh();
             MessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(5000));
         }
+
+        private BindableCollection<YearMonthModel> _yearMonths;
+
+        public BindableCollection<YearMonthModel> YearMonths
+        {
+            get
+            {
+                using (_dbContext = new WHTDbContext())
+                {
+                    var tempYearMonths = _dbContext.YearMonths;
+                    _yearMonths = new BindableCollection<YearMonthModel>(tempYearMonths);
+                }
+                return _yearMonths;
+            }
+            set
+            {
+                _yearMonths = value;
+                NotifyOfPropertyChange(() => YearMonths);
+            }
+        }
+
 
         public bool CanTimeUpdate
         {
@@ -114,23 +136,7 @@ namespace WPFUI.ViewModels
         {
             get
             {
-                var daysOfSelectedMonth = Hours.Where(x => x.WorkingDate.Month.Equals(SelectedDate.Month) && x.EmployeeId.Equals(SelectedEmployee.Id));
-
-                if (daysOfSelectedMonth.Any())
-                {
-                    var listOfDays = daysOfSelectedMonth.ToList();
-                    TimeSpan hoursSum = new TimeSpan(0, 0, 0);
-                    foreach (var day in listOfDays)
-                    {
-                        hoursSum = hoursSum.Add(day.Normal.Value);
-                    }
-
-                    return _normalHoursSum = new DateTime(hoursSum.Ticks).ToString("HH:mm");
-                }
-                else
-                {
-                    return "0";
-                }
+                return _normalHoursSum;
             }
             set
             {
@@ -142,23 +148,7 @@ namespace WPFUI.ViewModels
         {
             get
             {
-                var daysOfSelectedMonth = Hours.Where(x => x.WorkingDate.Month.Equals(SelectedDate.Month) && x.EmployeeId.Equals(SelectedEmployee.Id));
-
-                if (daysOfSelectedMonth.Any())
-                {
-                    var listOfDays = daysOfSelectedMonth.ToList();
-                    TimeSpan hoursSum = new TimeSpan(0, 0,0);
-                    foreach (var day in listOfDays)
-                    {
-                        hoursSum = hoursSum.Add(day.Overtime.Value);
-                    }
-
-                    return _overtimeHoursSum = new DateTime(hoursSum.Ticks).ToString("HH:mm");
-                }
-                else
-                {
-                    return "0";
-                }
+                return _overtimeHoursSum;
             }
             set
             {
@@ -178,8 +168,7 @@ namespace WPFUI.ViewModels
                 Hours.Refresh();
                 NotifyOfPropertyChange(() => SelectedDate);
                 NotifyOfPropertyChange(() => SelectedDateHoursSum);
-                NotifyOfPropertyChange(() => NormalHoursSum);
-                NotifyOfPropertyChange(() => OvertimeHoursSum);
+                NormalAndOvertimeUpdate();
                 NotifyOfPropertyChange(() => CanTimeUpdate);
             }
         }
@@ -211,8 +200,7 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => SelectedEmployee);
                 Hours.Refresh();
                 NotifyOfPropertyChange(() => SelectedDateHoursSum);
-                NotifyOfPropertyChange(() => NormalHoursSum);
-                NotifyOfPropertyChange(() => OvertimeHoursSum);
+                NormalAndOvertimeUpdate();
                 NotifyOfPropertyChange(() => CanTimeUpdate);
             }
         }
@@ -285,12 +273,65 @@ namespace WPFUI.ViewModels
             }
 
             NotifyOfPropertyChange(() => SelectedDateHoursSum);
-            NotifyOfPropertyChange(() => NormalHoursSum);
-            NotifyOfPropertyChange(() => OvertimeHoursSum);
+            NormalAndOvertimeUpdate();
         }
         private void timer_tick(object sender, EventArgs e)
         {
             NotifyOfPropertyChange(() => Time);
+        }
+
+        private void NormalAndOvertimeUpdate()
+        {
+            var monthHasHolidays = YearMonths.Where(x => x.Year.Equals(SelectedDate.Year) && x.Month.Equals(SelectedDate.Month));
+
+            if (!monthHasHolidays.Any())
+            {
+                MessageQueue.Enqueue($"Wpierw ustaw weekendy i święta {SelectedDate.Month}-ego miesiąca {SelectedDate.Year} roku przed ustawianiem godzin pracownika.");
+                SelectedDate = DateTime.Now;
+                return;
+            }
+
+            var daysOfSelectedMonth = Hours.Where(x => x.WorkingDate.Month.Equals(SelectedDate.Month) && x.EmployeeId.Equals(SelectedEmployee.Id));
+
+            if (!daysOfSelectedMonth.Any())
+            {
+                NormalHoursSum = "00:00";
+                OvertimeHoursSum = "00:00";
+
+                return;
+            }
+
+            var listOfDays = daysOfSelectedMonth.ToList();
+
+
+            HashSet<int> listOfWeekendsAndHolidays = new HashSet<int>();
+            listOfWeekendsAndHolidays = YearMonths.First(x => x.Year.Equals(SelectedDate.Year) && x.Month.Equals(SelectedDate.Month)).MonthsWeekendDays;
+
+            TimeSpan normalSum = new TimeSpan(0, 0, 0);
+            TimeSpan overtimeSum = new TimeSpan(0, 0, 0);
+            foreach (var day in listOfDays)
+            {
+                var totalHours = (day.To - day.From);
+
+                if (listOfWeekendsAndHolidays.Contains(day.WorkingDate.Day)) //if it is a weekend/holiday
+                {
+                    overtimeSum = overtimeSum.Add(totalHours);
+                    continue;
+                }
+
+                if (totalHours <= new TimeSpan(8, 0, 0))
+                {
+                    normalSum = normalSum.Add(totalHours);
+                }
+                else
+                {
+                    normalSum = normalSum.Add(new TimeSpan(8, 0, 0));
+                    overtimeSum = overtimeSum.Add(totalHours - new TimeSpan(8, 0, 0));
+                }
+            }
+
+            NormalHoursSum = new DateTime(normalSum.Ticks).ToString("HH:mm");
+            OvertimeHoursSum = new DateTime(overtimeSum.Ticks).ToString("HH:mm");
         }
     }
 }
