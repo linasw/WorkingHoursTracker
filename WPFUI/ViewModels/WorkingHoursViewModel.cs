@@ -26,6 +26,7 @@ namespace WPFUI.ViewModels
         private DateTime? _timeFrom;
         private DispatcherTimer _timer;
         private DateTime? _timeTo;
+        private BindableCollection<YearMonthModel> _yearMonths;
 
         public WorkingHoursViewModel()
         {
@@ -41,27 +42,6 @@ namespace WPFUI.ViewModels
             YearMonths.Refresh();
             MessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(5000));
         }
-
-        private BindableCollection<YearMonthModel> _yearMonths;
-
-        public BindableCollection<YearMonthModel> YearMonths
-        {
-            get
-            {
-                using (_dbContext = new WHTDbContext())
-                {
-                    var tempYearMonths = _dbContext.YearMonths;
-                    _yearMonths = new BindableCollection<YearMonthModel>(tempYearMonths);
-                }
-                return _yearMonths;
-            }
-            set
-            {
-                _yearMonths = value;
-                NotifyOfPropertyChange(() => YearMonths);
-            }
-        }
-
 
         public bool CanTimeUpdate
         {
@@ -132,6 +112,7 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => MessageQueue);
             }
         }
+
         public string NormalHoursSum
         {
             get
@@ -144,6 +125,7 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => NormalHoursSum);
             }
         }
+
         public string OvertimeHoursSum
         {
             get
@@ -156,6 +138,7 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => OvertimeHoursSum);
             }
         }
+
         public DateTime SelectedDate
         {
             get
@@ -172,6 +155,7 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => CanTimeUpdate);
             }
         }
+
         public string SelectedDateHoursSum
         {
             get
@@ -188,6 +172,7 @@ namespace WPFUI.ViewModels
                 }
             }
         }
+
         public EmployeeModel SelectedEmployee
         {
             get
@@ -204,6 +189,7 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => CanTimeUpdate);
             }
         }
+
         public String Time
         {
             get
@@ -211,6 +197,7 @@ namespace WPFUI.ViewModels
                 return DateTime.Now.ToLongDateString() + ", " + DateTime.Now.ToLongTimeString();
             }
         }
+
         public DateTime? TimeFrom
         {
             get
@@ -224,6 +211,7 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => CanTimeUpdate);
             }
         }
+
         public DateTime? TimeTo
         {
             get
@@ -237,6 +225,25 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => CanTimeUpdate);
             }
         }
+
+        public BindableCollection<YearMonthModel> YearMonths
+        {
+            get
+            {
+                using (_dbContext = new WHTDbContext())
+                {
+                    var tempYearMonths = _dbContext.YearMonths;
+                    _yearMonths = new BindableCollection<YearMonthModel>(tempYearMonths);
+                }
+                return _yearMonths;
+            }
+            set
+            {
+                _yearMonths = value;
+                NotifyOfPropertyChange(() => YearMonths);
+            }
+        }
+
         public void TimeUpdate()
         {
             using (_dbContext = new WHTDbContext())
@@ -274,10 +281,6 @@ namespace WPFUI.ViewModels
 
             NotifyOfPropertyChange(() => SelectedDateHoursSum);
             NormalAndOvertimeUpdate();
-        }
-        private void timer_tick(object sender, EventArgs e)
-        {
-            NotifyOfPropertyChange(() => Time);
         }
 
         private void NormalAndOvertimeUpdate()
@@ -332,6 +335,11 @@ namespace WPFUI.ViewModels
 
             NormalHoursSum = new DateTime(normalSum.Ticks).ToString("HH:mm");
             OvertimeHoursSum = new DateTime(overtimeSum.Ticks).ToString("HH:mm");
+        }
+
+        private void timer_tick(object sender, EventArgs e)
+        {
+            NotifyOfPropertyChange(() => Time);
         }
     }
 }

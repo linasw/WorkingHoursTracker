@@ -1,4 +1,4 @@
-namespace WPFUI
+﻿namespace WPFUI
 {
     using System;
     using System.Collections.Generic;
@@ -96,6 +96,106 @@ namespace WPFUI
             };
             YearMonths.Add(yearMonth);
 
+            VacationModel vacation = new VacationModel
+            {
+                From = DateTime.Now,
+                To = DateTime.Now.AddDays(7),
+                Type = Models.Enums.VacationTypes.PŁATNY,
+                EmployeeId = 1
+            };
+            Vacations.Add(vacation);
+
+            vacation = new VacationModel
+            {
+                From = DateTime.Now,
+                To = DateTime.Now.AddDays(3),
+                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                EmployeeId = 2
+            };
+            Vacations.Add(vacation);
+
+            vacation = new VacationModel
+            {
+                From = DateTime.Now,
+                To = DateTime.Now.AddDays(3),
+                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                EmployeeId = 3
+            };
+            Vacations.Add(vacation);
+
+            vacation = new VacationModel
+            {
+                From = DateTime.Now,
+                To = DateTime.Now.AddDays(3),
+                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                EmployeeId = 1
+            };
+            Vacations.Add(vacation);
+
+            vacation = new VacationModel
+            {
+                From = DateTime.Now,
+                To = DateTime.Now.AddDays(3),
+                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                EmployeeId = 2
+            };
+            Vacations.Add(vacation);
+            vacation = new VacationModel
+            {
+                From = DateTime.Now,
+                To = DateTime.Now.AddDays(3),
+                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                EmployeeId = 2
+            };
+            Vacations.Add(vacation);
+            vacation = new VacationModel
+            {
+                From = DateTime.Now,
+                To = DateTime.Now.AddDays(3),
+                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                EmployeeId = 2
+            };
+            Vacations.Add(vacation);
+            vacation = new VacationModel
+            {
+                From = DateTime.Now,
+                To = DateTime.Now.AddDays(3),
+                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                EmployeeId = 2
+            };
+            Vacations.Add(vacation);
+            vacation = new VacationModel
+            {
+                From = DateTime.Now,
+                To = DateTime.Now.AddDays(3),
+                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                EmployeeId = 2
+            };
+            Vacations.Add(vacation);
+            vacation = new VacationModel
+            {
+                From = DateTime.Now,
+                To = DateTime.Now.AddDays(3),
+                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                EmployeeId = 2
+            };
+            Vacations.Add(vacation);
+            vacation = new VacationModel
+            {
+                From = DateTime.Now,
+                To = DateTime.Now.AddDays(3),
+                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                EmployeeId = 2
+            };
+            vacation = new VacationModel
+            {
+                From = DateTime.Now,
+                To = DateTime.Now.AddDays(3),
+                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                EmployeeId = 2
+            };
+            Vacations.Add(vacation);
+            Vacations.Add(vacation);
             this.SaveChanges();
         }
     }

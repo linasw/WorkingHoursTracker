@@ -33,7 +33,7 @@ namespace WPFUI.ViewModels
 
         public void LoadVacations()
         {
-
+            ActivateItem(new VacationsViewModel());
         }
 
         public void LoadMonthOverview()
