@@ -12,45 +12,47 @@
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto" WindowStartupLocation="CenterScreen" WindowStyle="None">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <!-- TOP GRID -->
-        <Grid Grid.ColumnSpan="2" Background="{DynamicResource PrimaryHueMidBrush}" x:Name="TopGrid" MouseDown="TopGrid_MouseDown">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Background="{x:Null}" Margin="0 0 10 0">
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" x:Name="Minimaze">
-                    <materialDesign:PackIcon Kind="WindowMinimize" />
-                </Button>
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" x:Name="Quit">
-                    <materialDesign:PackIcon Kind="Power" />
-                </Button>
-            </StackPanel>
-        </Grid>
-
-        <!-- SIDE BAR -->
-        <Grid Grid.Row="1" Grid.Column="0">
+    <materialDesign:DialogHost Identifier="RootDialog">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="100" />
+                <RowDefinition Height="30" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid Background="{StaticResource PrimaryHueLightBrush}">
-                <Image Source="../Resources/wrlogo.png" />
+            <!-- TOP GRID -->
+            <Grid Grid.ColumnSpan="2" Background="{DynamicResource PrimaryHueMidBrush}" x:Name="TopGrid" MouseDown="TopGrid_MouseDown">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Background="{x:Null}" Margin="0 0 10 0">
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" x:Name="Minimaze">
+                        <materialDesign:PackIcon Kind="WindowMinimize" />
+                    </Button>
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" x:Name="Quit">
+                        <materialDesign:PackIcon Kind="Power" />
+                    </Button>
+                </StackPanel>
             </Grid>
-            <StackPanel Grid.Row="1" Background="{StaticResource PrimaryHueDarkBrush}">
-                <Button x:Name="LoadWorkHours" Margin="10">_GODZINY PRACY</Button>
-                <Button x:Name="LoadVacations" Margin="10">_URLOPY</Button>
-                <Button x:Name="LoadMonthOverview" Margin="10">_PRZEGLĄD MIESIĄCA</Button>
-                <Button x:Name="BackUp" Margin="10">_BACK UP</Button>
-            </StackPanel>
-        </Grid>
 
-        <!-- CONTENT CONTROL -->
-        <ContentControl Grid.Column="1" Grid.Row="1" x:Name="ActiveItem" />
-    </Grid>
+            <!-- SIDE BAR -->
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid Background="{StaticResource PrimaryHueLightBrush}">
+                    <Image Source="../Resources/wrlogo.png" />
+                </Grid>
+                <StackPanel Grid.Row="1" Background="{StaticResource PrimaryHueDarkBrush}">
+                    <Button x:Name="LoadWorkHours" Margin="10">_GODZINY PRACY</Button>
+                    <Button x:Name="LoadVacations" Margin="10">_URLOPY</Button>
+                    <Button x:Name="LoadMonthOverview" Margin="10">_PRZEGLĄD MIESIĄCA</Button>
+                    <Button x:Name="BackUp" Margin="10">_BACK UP</Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- CONTENT CONTROL -->
+            <ContentControl Grid.Column="1" Grid.Row="1" x:Name="ActiveItem" />
+        </Grid>
+    </materialDesign:DialogHost>
 </Window>

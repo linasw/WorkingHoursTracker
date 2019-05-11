@@ -99,7 +99,11 @@
     </Compile>
     <Compile Include="Models\EmployeeVacationModel.cs" />
     <Compile Include="Models\YearMonthModel.cs" />
+    <Compile Include="ViewModels\ConfirmationDialogViewModel.cs" />
     <Compile Include="ViewModels\VacationDialogViewModel.cs" />
+    <Compile Include="Views\ConfirmationDialogView.xaml.cs">
+      <DependentUpon>ConfirmationDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProgressDialog.xaml.cs">
       <DependentUpon>ProgressDialog.xaml</DependentUpon>
     </Compile>
@@ -165,6 +169,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Views\ConfirmationDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ProgressDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

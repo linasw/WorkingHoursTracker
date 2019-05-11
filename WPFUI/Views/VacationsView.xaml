@@ -11,33 +11,29 @@
              TextElement.FontWeight="Medium"
              TextElement.FontSize="14"
              FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
-    <materialDesign:DialogHost Identifier="RootDialog">
-        <Grid Margin="25">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
+    <Grid Margin="25">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-                <Button Margin="0 0 10 0" x:Name="AddVacation">
-                    _DODAJ NOWY
-                </Button>
-                <Button x:Name="DeleteSelectedVacation">
-                    _USUŃ ZAZNACZONY
-                </Button>
-            </StackPanel>
-
-            <DataGrid Grid.Row="1" ItemsSource="{Binding EmployeesVacations}"
-                  CanUserSortColumns="True" CanUserAddRows="False" IsReadOnly="False" AutoGenerateColumns="False"
+        <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+            <Button Margin="0 0 10 0" x:Name="AddVacation">
+                _DODAJ NOWY
+            </Button>
+            <Button x:Name="DeleteSelectedVacation">
+                _USUŃ ZAZNACZONY
+            </Button>
+        </StackPanel>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding EmployeesVacations}"
+                  CanUserSortColumns="True" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="False"
                   SelectedItem="{Binding SelectedEmployeeVacation}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn  Binding="{Binding FullName}" Header="Pracownik" />
-
-                    <DataGridTextColumn Binding="{Binding From, StringFormat='dd.MM.yyyy'}" Header="Od" />
-                    <DataGridTextColumn Binding="{Binding To, StringFormat='dd.MM.yyyy'}" Header="Do" />
-                    <DataGridTextColumn Binding="{Binding Type}" Header="Rodzaj urlopu" Width="*"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
-    </materialDesign:DialogHost>
+            <DataGrid.Columns>
+                <DataGridTextColumn  Binding="{Binding FullName}" Header="Pracownik" />
+                <DataGridTextColumn Binding="{Binding From, StringFormat='dd.MM.yyyy'}" Header="Od" />
+                <DataGridTextColumn Binding="{Binding To, StringFormat='dd.MM.yyyy'}" Header="Do" />
+                <DataGridTextColumn Binding="{Binding Type}" Header="Rodzaj urlopu" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
 </UserControl>

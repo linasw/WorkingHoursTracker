@@ -63,10 +63,11 @@ namespace WPFUI.ViewModels
             {
                 _selectedEmployeeVacation = value;
                 NotifyOfPropertyChange(() => SelectedEmployeeVacation);
+                NotifyOfPropertyChange(() => CanDeleteSelectedVacation);
             }
         }
 
-        #region VACATION DIALOG
+        #region NEW VACATION DIALOG
         public async void AddVacation()
         {
             var view = new VacationDialogView
@@ -74,15 +75,15 @@ namespace WPFUI.ViewModels
                 DataContext = new VacationDialogViewModel()
             };
 
-            var result = await DialogHost.Show(view, "RootDialog", OpenedEventHandler, ClosingEventHandler);
+            var result = await DialogHost.Show(view, "RootDialog", VacationOpenedEventHandler, VacationClosingEventHandler);
         }
 
-        private void OpenedEventHandler(object sender, DialogOpenedEventArgs eventargs)
+        private void VacationOpenedEventHandler(object sender, DialogOpenedEventArgs eventargs)
         {
 
         }
 
-        private void ClosingEventHandler(object sender, DialogClosingEventArgs eventArgs)
+        private void VacationClosingEventHandler(object sender, DialogClosingEventArgs eventArgs)
         {
             if ((bool)eventArgs.Parameter == false) return;
             eventArgs.Cancel();
@@ -103,6 +104,53 @@ namespace WPFUI.ViewModels
             using (_dbContext = new WHTDbContext())
             {
                 _dbContext.Vacations.Add(tempVacation);
+                _dbContext.SaveChanges();
+            }
+            NotifyOfPropertyChange(() => EmployeesVacations);
+
+            Task.Delay(TimeSpan.FromSeconds(1))
+                .ContinueWith((t, _) => eventArgs.Session.Close(false), null,
+                    TaskScheduler.FromCurrentSynchronizationContext());
+        }
+        #endregion
+
+        #region DELETE CONFIRMATION DIALOG
+        public bool CanDeleteSelectedVacation
+        {
+            get
+            {
+                return (SelectedEmployeeVacation != null);
+            }
+        }
+
+        public async void DeleteSelectedVacation()
+        {
+            var view = new ConfirmationDialogView
+            {
+                DataContext = new ConfirmationDialogViewModel()
+            };
+
+            var result = await DialogHost.Show(view, "RootDialog", ConfirmationOpenedEventHandler, ConfirmationClosingEventHandler);
+        }
+
+        private void ConfirmationOpenedEventHandler(object sender, DialogOpenedEventArgs eventargs)
+        {
+
+        }
+
+        private void ConfirmationClosingEventHandler(object sender, DialogClosingEventArgs eventArgs)
+        {
+            if ((bool)eventArgs.Parameter == false) return;
+
+            eventArgs.Cancel();
+
+            eventArgs.Session.UpdateContent(new ProgressDialog());
+
+            using (_dbContext = new WHTDbContext())
+            {
+                var vacation = new VacationModel { Id = SelectedEmployeeVacation.VacationId };
+                _dbContext.Vacations.Attach(vacation);
+                _dbContext.Vacations.Remove(vacation);
                 _dbContext.SaveChanges();
             }
             NotifyOfPropertyChange(() => EmployeesVacations);
