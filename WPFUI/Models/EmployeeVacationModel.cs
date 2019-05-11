@@ -23,6 +23,13 @@ namespace WPFUI.Models
             {
                 return FirstName + " " + LastName;
             }
+            set
+            {
+                var temp = value;
+                var splits = temp.Split(' ');
+                FirstName = splits[0];
+                LastName = splits[1];
+            }
         }
     }
 }

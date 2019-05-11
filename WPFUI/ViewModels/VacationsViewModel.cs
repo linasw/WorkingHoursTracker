@@ -1,10 +1,13 @@
 ﻿using Caliburn.Micro;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using WPFUI.Models;
+using WPFUI.Views;
 
 namespace WPFUI.ViewModels
 {
@@ -13,12 +16,13 @@ namespace WPFUI.ViewModels
         private static NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private WHTDbContext _dbContext;
         private BindableCollection<EmployeeVacationModel> _employeesVacations;
-        private BindableCollection<VacationModel> _vacations;
+        private EmployeeVacationModel _selectedEmployeeVacation;
 
         public VacationsViewModel()
         {
 
         }
+
         public BindableCollection<EmployeeVacationModel> EmployeesVacations
         {
             get
@@ -49,22 +53,64 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => EmployeesVacations);
             }
         }
-        public BindableCollection<VacationModel> Vacations
+        public EmployeeVacationModel SelectedEmployeeVacation
         {
             get
             {
-                using (_dbContext = new WHTDbContext())
-                {
-                    var tempVacations = _dbContext.Vacations;
-                    _vacations = new BindableCollection<VacationModel>(tempVacations);
-                }
-                return _vacations;
+                return _selectedEmployeeVacation;
             }
             set
             {
-                _vacations = value;
-                NotifyOfPropertyChange(() => Vacations);
+                _selectedEmployeeVacation = value;
+                NotifyOfPropertyChange(() => SelectedEmployeeVacation);
             }
         }
+
+        #region VACATION DIALOG
+        public async void AddVacation()
+        {
+            var view = new VacationDialogView
+            {
+                DataContext = new VacationDialogViewModel()
+            };
+
+            var result = await DialogHost.Show(view, "RootDialog", OpenedEventHandler, ClosingEventHandler);
+        }
+
+        private void OpenedEventHandler(object sender, DialogOpenedEventArgs eventargs)
+        {
+
+        }
+
+        private void ClosingEventHandler(object sender, DialogClosingEventArgs eventArgs)
+        {
+            if ((bool)eventArgs.Parameter == false) return;
+            eventArgs.Cancel();
+
+            var dialogViewContent = (VacationDialogView)eventArgs.Content;
+            var dialogData = (VacationDialogViewModel)dialogViewContent.DataContext;
+
+            VacationModel tempVacation = new VacationModel
+            {
+                From = dialogData.DateFrom,
+                To = dialogData.DateTo,
+                Type = dialogData.SelectedVacationType,
+                EmployeeId = dialogData.SelectedEmployee.Id
+            };
+
+            eventArgs.Session.UpdateContent(new ProgressDialog());
+
+            using (_dbContext = new WHTDbContext())
+            {
+                _dbContext.Vacations.Add(tempVacation);
+                _dbContext.SaveChanges();
+            }
+            NotifyOfPropertyChange(() => EmployeesVacations);
+
+            Task.Delay(TimeSpan.FromSeconds(1))
+                .ContinueWith((t, _) => eventArgs.Session.Close(false), null,
+                    TaskScheduler.FromCurrentSynchronizationContext());
+        }
+        #endregion
     }
 }
