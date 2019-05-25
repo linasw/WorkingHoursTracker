@@ -48,6 +48,7 @@ namespace WPFUI.ViewModels
                 NotifyOfPropertyChange(() => Weekends);
                 NotifyOfPropertyChange(() => SelectedDateIsWeekend);
                 NotifyOfPropertyChange(() => SelectedDateEmployeesHours);
+                NotifyOfPropertyChange(() => WorkHours);
                 if (_yearOrMonthChanged)
                 {
                     NotifyOfPropertyChange(() => SelectedMonthMissingInfo);
@@ -177,6 +178,23 @@ namespace WPFUI.ViewModels
             }
         }
 
+        private string _workHours;
+
+        public string WorkHours
+        {
+            get
+            {
+                var temp = YearMonth.Where(x => x.Year.Equals(SelectedDate.Year) && x.Month.Equals(SelectedDate.Month));
+                if (!temp.Any())
+                {
+                    return "NIE USTAWIONO. USTAW JE KLIKAJĄC PRZYCISK NA GÓRZE";
+                }
+
+                return _workHours = temp.First().MonthsWorkingHours.ToString();
+            }
+        }
+
+
         public BindableCollection<YearMonthModel> YearMonth
         {
             get
@@ -227,7 +245,7 @@ namespace WPFUI.ViewModels
                 Year = dialogData.SelectedDate.Year,
                 Month = dialogData.SelectedDate.Month,
                 MonthsWorkingHours = dialogData.MonthsWorkingHours,
-                InternalMonthsWeekendDays = string.Join(";", dialogData.WeekendDays)
+                MonthsWeekendDays = new HashSet<int>(Array.ConvertAll(dialogData.WeekendDays.Split(';'), int.Parse))
             };
 
             eventArgs.Session.UpdateContent(new ProgressDialog());
@@ -249,6 +267,9 @@ namespace WPFUI.ViewModels
             Task.Delay(TimeSpan.FromSeconds(1))
                 .ContinueWith((t, _) => eventArgs.Session.Close(false), null,
                     TaskScheduler.FromCurrentSynchronizationContext());
+
+            GetAndSetAllInfoFromDatabase();
+            NotifyOfPropertyChange(() => SelectedDate);
         }
 
         #endregion

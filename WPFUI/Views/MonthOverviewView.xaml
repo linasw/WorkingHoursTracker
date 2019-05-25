@@ -99,6 +99,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
@@ -112,15 +113,26 @@
                                TextWrapping="Wrap"
                                x:Name="Weekends">
                     </TextBlock>
-                    
+
                     <!-- ROW 1 -->
                     <TextBlock Grid.Row="1" Grid.Column="0"
+                               Margin="6">
+                        Liczba godzin pracy:
+                    </TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="1"
+                               Margin="6"
+                               TextWrapping="Wrap"
+                               x:Name="WorkHours">
+                    </TextBlock>
+
+                    <!-- ROW 2 -->
+                    <TextBlock Grid.Row="2" Grid.Column="0"
                                Margin="6 0 6 6"
                                TextWrapping="Wrap"
                                MaxWidth="150">
                         Brak kompletności informacji w dniach: 
                     </TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="1"
+                    <TextBlock Grid.Row="2" Grid.Column="1"
                                Margin="6"
                                TextWrapping="Wrap"
                                x:Name="SelectedMonthMissingInfo">

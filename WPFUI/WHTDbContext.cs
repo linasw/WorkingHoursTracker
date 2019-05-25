@@ -128,10 +128,10 @@
             Hours.Add(tempHours);
 
             HashSet<int> weekends = new HashSet<int>();
-            weekends.Add(4);
-            weekends.Add(5);
             weekends.Add(1);
             weekends.Add(3);
+            weekends.Add(4);
+            weekends.Add(5);
             weekends.Add(11);
             weekends.Add(12);
             weekends.Add(18);
@@ -141,11 +141,22 @@
             YearMonthModel yearMonth = new YearMonthModel { Year=2019, Month=5, MonthsWorkingHours=168, MonthsWeekendDays= new HashSet<int>(weekends)};
             YearMonths.Add(yearMonth);
 
+            YearMonths.Add(yearMonth);
+
             yearMonth = new YearMonthModel
             {
                 Year = 2019,
                 Month = 6,
                 MonthsWorkingHours = 160,
+                MonthsWeekendDays = new HashSet<int>(weekends)
+            };
+            YearMonths.Add(yearMonth);
+
+            yearMonth = new YearMonthModel
+            {
+                Year = 2019,
+                Month = 7,
+                MonthsWorkingHours = 200,
                 MonthsWeekendDays = new HashSet<int>(weekends)
             };
             YearMonths.Add(yearMonth);
