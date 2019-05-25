@@ -73,6 +73,60 @@
             };
             Hours.Add(tempHours);
 
+            tempHours = new HoursModel
+            {
+                WorkingDate = now,
+                From = new TimeSpan(6, 30, 0),
+                To = new TimeSpan(10, 0, 0),
+                EmployeeId = 3
+            };
+            Hours.Add(tempHours);
+
+            tempHours = new HoursModel
+            {
+                WorkingDate = now,
+                From = new TimeSpan(6, 30, 0),
+                To = new TimeSpan(10, 0, 0),
+                EmployeeId = 4
+            };
+            Hours.Add(tempHours);
+
+            tempHours = new HoursModel
+            {
+                WorkingDate = now.AddDays(-3),
+                From = new TimeSpan(6, 30, 0),
+                To = new TimeSpan(10, 0, 0),
+                EmployeeId = 1
+            };
+            Hours.Add(tempHours);
+
+            tempHours = new HoursModel
+            {
+                WorkingDate = now.AddDays(-3),
+                From = new TimeSpan(6, 30, 0),
+                To = new TimeSpan(10, 0, 0),
+                EmployeeId = 2
+            };
+            Hours.Add(tempHours);
+
+            tempHours = new HoursModel
+            {
+                WorkingDate = now.AddDays(-3),
+                From = new TimeSpan(6, 30, 0),
+                To = new TimeSpan(10, 0, 0),
+                EmployeeId = 3
+            };
+            Hours.Add(tempHours);
+
+            tempHours = new HoursModel
+            {
+                WorkingDate = now.AddDays(-3),
+                From = new TimeSpan(6, 30, 0),
+                To = new TimeSpan(10, 0, 0),
+                EmployeeId = 4
+            };
+            Hours.Add(tempHours);
+
             HashSet<int> weekends = new HashSet<int>();
             weekends.Add(4);
             weekends.Add(5);

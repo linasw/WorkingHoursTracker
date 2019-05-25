@@ -14,6 +14,7 @@ namespace WPFUI.ViewModels
         private WHTDbContext _dbContext;
         private BindableCollection<YearMonthModel> _yearMonth;
         private DateTime _selectedDate;
+        private bool _yearOrMonthChanged;
 
         public MonthOverviewViewModel()
         {
@@ -52,12 +53,23 @@ namespace WPFUI.ViewModels
             }
             set
             {
+                if (SelectedDate.Year.Equals(value.Year) && SelectedDate.Month.Equals(value.Month))
+                {
+                    _yearOrMonthChanged = false;
+                }
+                else
+                {
+                    _yearOrMonthChanged = true;
+                }
                 _selectedDate = value;
                 NotifyOfPropertyChange(() => SelectedDate);
                 NotifyOfPropertyChange(() => Weekends);
                 NotifyOfPropertyChange(() => SelectedDateIsWeekend);
                 NotifyOfPropertyChange(() => SelectedDateEmployeesHours);
-                NotifyOfPropertyChange(() => SelectedMonthMissingInfo);
+                if (_yearOrMonthChanged)
+                {
+                    NotifyOfPropertyChange(() => SelectedMonthMissingInfo);
+                }
             }
         }
 
@@ -134,25 +146,57 @@ namespace WPFUI.ViewModels
             }
         }
 
+        private string _selectedMonthMissingInfo;
+
         public string SelectedMonthMissingInfo
         {
             get
             {
-                //if (string.IsNullOrEmpty(_selectedMonthMissingInfo) && !)
                 using (_dbContext = new WHTDbContext())
                 {
                     var selectedMonthsHours = _dbContext.Hours.Where(x => x.WorkingDate.Year.Equals(SelectedDate.Year) && x.WorkingDate.Month.Equals(SelectedDate.Month));
 
                     if (!selectedMonthsHours.Any())
                     {
-                        return "BRAK USTAWIONYCH GODZIN W CAŁYM MIESIĄCU.";
+                        return _selectedMonthMissingInfo = "BRAK USTAWIONYCH GODZIN W CAŁYM MIESIĄCU.";
                     }
 
+                    var daysOfMonth = DateTime.DaysInMonth(SelectedDate.Year, SelectedDate.Month);
+                    var employees = _dbContext.Employees.ToList();
                     HashSet<int> listOfMissingDaysInfo = new HashSet<int>();
 
-                    //TODO - loop though each day in month and check if all employees entered their working hours
+                    for (int i = 1; i <= daysOfMonth; i++)
+                    {
+                        var dayHours = _dbContext.Hours.Where(x => x.WorkingDate.Year.Equals(SelectedDate.Year) && x.WorkingDate.Month.Equals(SelectedDate.Month) && x.WorkingDate.Day.Equals(i));
 
-                    return string.Join(", ", listOfMissingDaysInfo);
+                        if (!dayHours.Any())
+                        {
+                            listOfMissingDaysInfo.Add(i);
+                            continue;
+                        }
+
+                        var dayHoursEmployeeIDList = dayHours.Select(x => x.EmployeeId).ToList();
+
+                        foreach (var employee in employees)
+                        {
+                            if (dayHoursEmployeeIDList.Contains(employee.Id))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                listOfMissingDaysInfo.Add(i);
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!listOfMissingDaysInfo.Any())
+                    {
+                        return _selectedMonthMissingInfo = "Wszystkie dni zostały uzupełnione.";
+                    }
+
+                    return _selectedMonthMissingInfo = string.Join(", ", listOfMissingDaysInfo);
                 }
             }
         }
