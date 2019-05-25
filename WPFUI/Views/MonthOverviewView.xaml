@@ -22,7 +22,7 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Margin="0 0 0 10" Orientation="Horizontal">
-            <Button>_USTAWIENIA MIESIĄCA</Button>
+            <Button x:Name="MonthOptions">_USTAWIENIA MIESIĄCA</Button>
         </StackPanel>
 
         <Calendar Grid.Row="1" FirstDayOfWeek="Monday" 

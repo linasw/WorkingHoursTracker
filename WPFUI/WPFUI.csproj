@@ -101,10 +101,14 @@
     <Compile Include="Models\EmployeeVacationModel.cs" />
     <Compile Include="Models\YearMonthModel.cs" />
     <Compile Include="ViewModels\ConfirmationDialogViewModel.cs" />
+    <Compile Include="ViewModels\MonthOptionsDialogViewModel.cs" />
     <Compile Include="ViewModels\MonthOverviewViewModel.cs" />
     <Compile Include="ViewModels\VacationDialogViewModel.cs" />
     <Compile Include="Views\ConfirmationDialogView.xaml.cs">
       <DependentUpon>ConfirmationDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MonthOptionsDialogView.xaml.cs">
+      <DependentUpon>MonthOptionsDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MonthOverviewView.xaml.cs">
       <DependentUpon>MonthOverviewView.xaml</DependentUpon>
@@ -175,6 +179,10 @@
   <ItemGroup />
   <ItemGroup>
     <Page Include="Views\ConfirmationDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MonthOptionsDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
