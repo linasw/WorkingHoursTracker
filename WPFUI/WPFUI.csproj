@@ -97,12 +97,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\EmployeeHours.cs" />
     <Compile Include="Models\EmployeeVacationModel.cs" />
     <Compile Include="Models\YearMonthModel.cs" />
     <Compile Include="ViewModels\ConfirmationDialogViewModel.cs" />
+    <Compile Include="ViewModels\MonthOverviewViewModel.cs" />
     <Compile Include="ViewModels\VacationDialogViewModel.cs" />
     <Compile Include="Views\ConfirmationDialogView.xaml.cs">
       <DependentUpon>ConfirmationDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MonthOverviewView.xaml.cs">
+      <DependentUpon>MonthOverviewView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProgressDialog.xaml.cs">
       <DependentUpon>ProgressDialog.xaml</DependentUpon>
@@ -170,6 +175,10 @@
   <ItemGroup />
   <ItemGroup>
     <Page Include="Views\ConfirmationDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MonthOverviewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

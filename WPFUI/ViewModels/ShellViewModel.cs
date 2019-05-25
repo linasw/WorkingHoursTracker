@@ -12,7 +12,7 @@ namespace WPFUI.ViewModels
         {
             _dbContext = new WHTDbContext();
             _dbContext.InitDummyData();
-            //ActivateItem(new WorkingHoursViewModel());
+            ActivateItem(new WorkingHoursViewModel());
         }
 
         public void Quit()
@@ -38,7 +38,7 @@ namespace WPFUI.ViewModels
 
         public void LoadMonthOverview()
         {
-
+            ActivateItem(new MonthOverviewViewModel());
         }
 
         public void BackUp()

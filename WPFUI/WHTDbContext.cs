@@ -118,7 +118,7 @@
             {
                 From = DateTime.Now,
                 To = DateTime.Now.AddDays(3),
-                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                Type = Models.Enums.VacationTypes.OKOLICZNOŚCIOWY,
                 EmployeeId = 3
             };
             Vacations.Add(vacation);
@@ -127,7 +127,7 @@
             {
                 From = DateTime.Now,
                 To = DateTime.Now.AddDays(3),
-                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
+                Type = Models.Enums.VacationTypes.RODZICIELSKI,
                 EmployeeId = 1
             };
             Vacations.Add(vacation);
@@ -136,8 +136,8 @@
             {
                 From = DateTime.Now,
                 To = DateTime.Now.AddDays(3),
-                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
-                EmployeeId = 2
+                Type = Models.Enums.VacationTypes.WYPOCZYNKOWY,
+                EmployeeId = 4
             };
             Vacations.Add(vacation);
             vacation = new VacationModel
@@ -152,8 +152,8 @@
             {
                 From = DateTime.Now,
                 To = DateTime.Now.AddDays(3),
-                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
-                EmployeeId = 2
+                Type = Models.Enums.VacationTypes.RODZICIELSKI,
+                EmployeeId = 3
             };
             Vacations.Add(vacation);
             vacation = new VacationModel
@@ -161,40 +161,8 @@
                 From = DateTime.Now,
                 To = DateTime.Now.AddDays(3),
                 Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
-                EmployeeId = 2
+                EmployeeId = 4
             };
-            Vacations.Add(vacation);
-            vacation = new VacationModel
-            {
-                From = DateTime.Now,
-                To = DateTime.Now.AddDays(3),
-                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
-                EmployeeId = 2
-            };
-            Vacations.Add(vacation);
-            vacation = new VacationModel
-            {
-                From = DateTime.Now,
-                To = DateTime.Now.AddDays(3),
-                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
-                EmployeeId = 2
-            };
-            Vacations.Add(vacation);
-            vacation = new VacationModel
-            {
-                From = DateTime.Now,
-                To = DateTime.Now.AddDays(3),
-                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
-                EmployeeId = 2
-            };
-            vacation = new VacationModel
-            {
-                From = DateTime.Now,
-                To = DateTime.Now.AddDays(3),
-                Type = Models.Enums.VacationTypes.ZWOLNIENIE_LEKARSKIE,
-                EmployeeId = 2
-            };
-            Vacations.Add(vacation);
             Vacations.Add(vacation);
             this.SaveChanges();
         }

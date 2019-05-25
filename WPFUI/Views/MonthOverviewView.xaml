@@ -1,0 +1,131 @@
+﻿<UserControl x:Class="WPFUI.Views.MonthOverviewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFUI.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Medium"
+             TextElement.FontSize="14"
+             FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="25">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Margin="0 0 0 10" Orientation="Horizontal">
+            <Button>_USTAWIENIA MIESIĄCA</Button>
+        </StackPanel>
+
+        <Calendar Grid.Row="1" FirstDayOfWeek="Monday" 
+                  SelectionMode="SingleDate"
+                  SelectedDate="{Binding SelectedDate}">
+        </Calendar>
+
+        <Grid Grid.Row="1" Grid.Column="1" Margin="0 3 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <GroupBox Grid.Row="0"
+                  Header="Info z wybranego dnia"
+                  Style="{DynamicResource MaterialDesignGroupBox}"
+                  Margin="16 0 0 16"
+                  materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                  BorderThickness="0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- ROW 0 -->
+                    <TextBlock Grid.Row="0" Grid.Column="0"
+                               Margin="6">
+                        Weekend/święto:
+                    </TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="1"
+                               Margin="6"
+                               TextWrapping="Wrap"
+                               x:Name="SelectedDateIsWeekend">
+                    </TextBlock>
+                    
+                    <!-- ROW 1 -->
+                    <TextBlock Grid.Row="1" Grid.Column="0"
+                               Margin="6 0 6 6">
+                        Przepracowane godziny:
+                    </TextBlock>
+                    <DataGrid Grid.Row="1" Grid.Column="1"
+                        Margin="6 0 6 6"
+                        ItemsSource="{Binding SelectedDateEmployeesHours}"
+                        CanUserSortColumns="False"
+                        CanUserAddRows="False"
+                        AutoGenerateColumns="False"
+                        materialDesign:DataGridAssist.CellPadding="4 2 2 2"
+                        materialDesign:DataGridAssist.ColumnHeaderPadding="4 2 2 2" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding FullName}" Header="Pracownik" />
+                            <DataGridTextColumn Binding="{Binding From, StringFormat=hh\\:mm, TargetNullValue=BRAK}" Header="Od" />
+                            <DataGridTextColumn Binding="{Binding To, StringFormat=hh\\:mm, TargetNullValue=BRAK}" Header="Do" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Grid.Row="1"
+                  Header="Info z wybranego miesiąca"
+                  Style="{DynamicResource MaterialDesignGroupBox}"
+                  Margin="16 0 0 0"
+                  materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                  BorderThickness="0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- ROW 0 -->
+                    <TextBlock Grid.Row="0" Grid.Column="0"
+                               Margin="6">
+                        Lista weekendów/świąt:
+                    </TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="1"
+                               Margin="6"
+                               TextWrapping="Wrap"
+                               x:Name="Weekends">
+                    </TextBlock>
+                    
+                    <!-- ROW 1 -->
+                    <TextBlock Grid.Row="1" Grid.Column="0"
+                               Margin="6 0 6 6"
+                               TextWrapping="Wrap"
+                               MaxWidth="150">
+                        Brak kompletności informacji w dniach: 
+                    </TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="1"
+                               Margin="6"
+                               x:Name="SelectedMonthMissingInfo">
+                    </TextBlock>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>

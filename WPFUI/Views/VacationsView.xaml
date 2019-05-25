@@ -27,9 +27,9 @@
         </StackPanel>
         <DataGrid Grid.Row="1" ItemsSource="{Binding EmployeesVacations}"
                   CanUserSortColumns="True" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="False"
-                  SelectedItem="{Binding SelectedEmployeeVacation}">
+                  SelectedItem="{Binding SelectedEmployeeVacation}" SelectionMode="Single" SelectionUnit="FullRow">
             <DataGrid.Columns>
-                <DataGridTextColumn  Binding="{Binding FullName}" Header="Pracownik" />
+                <DataGridTextColumn Binding="{Binding FullName}" Header="Pracownik" />
                 <DataGridTextColumn Binding="{Binding From, StringFormat='dd.MM.yyyy'}" Header="Od" />
                 <DataGridTextColumn Binding="{Binding To, StringFormat='dd.MM.yyyy'}" Header="Do" />
                 <DataGridTextColumn Binding="{Binding Type}" Header="Rodzaj urlopu" Width="*"/>
