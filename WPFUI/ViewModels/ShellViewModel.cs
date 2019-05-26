@@ -43,7 +43,7 @@ namespace WPFUI.ViewModels
 
         public void BackUp()
         {
-
+            ActivateItem(new BackUpViewModel());
         }
 
         private WindowState _windowState;
